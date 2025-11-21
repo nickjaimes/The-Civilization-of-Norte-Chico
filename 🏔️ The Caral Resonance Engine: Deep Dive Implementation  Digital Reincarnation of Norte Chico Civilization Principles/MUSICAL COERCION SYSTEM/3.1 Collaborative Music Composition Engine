@@ -1,0 +1,162 @@
+// COLLABORATIVE MUSIC SYSTEM INSPIRED BY CARAL'S FLUTES
+use rodio::{Source, OutputStream};
+use std::sync::{Arc, Mutex};
+use std::time::Duration;
+
+#[derive(Clone, Debug)]
+pub struct CommunityMusicEngine {
+    pub composition_grid: CompositionGrid,
+    pub harmonic_rules: HarmonicRuleSet,
+    pub participant_instruments: ParticipantInstruments,
+    pub resonance_composer: ResonanceComposer,
+}
+
+impl CommunityMusicEngine {
+    pub async fn create_community_symphony(&self, community: &Community) -> CommunitySymphony {
+        // Phase 1: Community Resonance Analysis
+        let community_resonance = self.analyze_community_resonance(community).await;
+        
+        // Phase 2: Harmonic Framework Composition
+        let harmonic_framework = self.compose_harmonic_framework(&community_resonance).await;
+        
+        // Phase 3: Participant Contribution
+        let participant_contributions = self.collect_participant_contributions(community, &harmonic_framework).await;
+        
+        // Phase 4: Symphony Integration
+        let integrated_symphony = self.integrate_community_symphony(&harmonic_framework, participant_contributions).await;
+        
+        // Phase 5: Resonance Optimization
+        let optimized_symphony = self.optimize_symphony_resonance(integrated_symphony).await;
+        
+        optimized_symphony
+    }
+    
+    async fn analyze_community_resonance(&self, community: &Community) -> CommunityResonance {
+        let mut resonance = CommunityResonance::new();
+        
+        // Analyze individual participant frequencies
+        for participant in community.participants() {
+            let participant_frequency = self.analyze_participant_frequency(participant).await;
+            resonance.add_participant_frequency(participant.id, participant_frequency);
+        }
+        
+        // Analyze group harmonic relationships
+        let group_harmonics = self.analyze_group_harmonics(community).await;
+        resonance.group_harmonics = group_harmonics;
+        
+        // Calculate community resonance profile
+        resonance.profile = self.calculate_resonance_profile(&resonance).await;
+        
+        resonance
+    }
+    
+    async fn compose_harmonic_framework(&self, resonance: &CommunityResonance) -> HarmonicFramework {
+        let mut framework = HarmonicFramework::new();
+        
+        // Determine key based on community resonance
+        framework.key = self.determine_optimal_key(resonance).await;
+        
+        // Determine tempo based on community rhythm
+        framework.tempo = self.determine_optimal_tempo(resonance).await;
+        
+        // Create harmonic progression based on emotional resonance
+        framework.progression = self.create_resonant_progression(resonance).await;
+        
+        // Design musical structure based on community dynamics
+        framework.structure = self.design_musical_structure(resonance).await;
+        
+        framework
+    }
+    
+    async fn collect_participant_contributions(&self, community: &Community, framework: &HarmonicFramework) -> Vec<ParticipantContribution> {
+        let mut contributions = Vec::new();
+        
+        // Parallel collection of contributions
+        let contribution_tasks: Vec<_> = community.participants()
+            .iter()
+            .map(|participant| {
+                self.collect_individual_contribution(participant, framework)
+            })
+            .collect();
+        
+        let contribution_results = futures::future::join_all(contribution_tasks).await;
+        
+        for result in contribution_results {
+            contributions.push(result);
+        }
+        
+        contributions
+    }
+    
+    async fn collect_individual_contribution(&self, participant: &Participant, framework: &HarmonicFramework) -> ParticipantContribution {
+        let instrument = self.participant_instruments.get_instrument(participant).await;
+        
+        // Generate musical ideas based on participant's resonance
+        let musical_ideas = self.generate_musical_ideas(participant, framework).await;
+        
+        // Refine ideas based on harmonic rules
+        let refined_ideas = self.refine_musical_ideas(musical_ideas, framework).await;
+        
+        ParticipantContribution {
+            participant_id: participant.id,
+            instrument,
+            musical_ideas: refined_ideas,
+            resonance_level: self.calculate_contribution_resonance(&refined_ideas, framework).await,
+        }
+    }
+}
+
+// REAL-TIME MUSICAL RESONANCE DETECTION
+pub struct MusicalResonanceDetector {
+    pub audio_analyzer: AudioAnalyzer,
+    pub harmony_detector: HarmonyDetector,
+    pub rhythm_analyzer: RhythmAnalyzer,
+}
+
+impl MusicalResonanceDetector {
+    pub async fn detect_musical_resonance(&self, audio_stream: AudioStream) -> MusicalResonance {
+        let mut resonance = MusicalResonance::new();
+        
+        // Real-time analysis in chunks
+        for chunk in audio_stream.chunks() {
+            // Analyze harmonic content
+            let harmonic_analysis = self.audio_analyzer.analyze_harmonics(&chunk).await;
+            resonance.harmonic_content.push(harmonic_analysis);
+            
+            // Detect rhythmic patterns
+            let rhythm_patterns = self.rhythm_analyzer.analyze_rhythm(&chunk).await;
+            resonance.rhythm_patterns.push(rhythm_patterns);
+            
+            // Calculate emotional resonance
+            let emotional_resonance = self.calculate_emotional_resonance(&chunk).await;
+            resonance.emotional_resonance.push(emotional_resonance);
+        }
+        
+        // Calculate overall resonance metrics
+        resonance.overall_coherence = self.calculate_overall_coherence(&resonance).await;
+        resonance.harmonic_stability = self.calculate_harmonic_stability(&resonance).await;
+        resonance.rhythmic_sync = self.calculate_rhythmic_sync(&resonance).await;
+        
+        resonance
+    }
+    
+    async fn calculate_emotional_resonance(&self, audio_chunk: &AudioChunk) -> EmotionalResonance {
+        let mut emotional_resonance = EmotionalResonance::new();
+        
+        // Extract spectral features for emotion detection
+        let spectral_features = self.audio_analyzer.extract_spectral_features(audio_chunk).await;
+        
+        // Analyze melody for emotional content
+        let melodic_analysis = self.analyze_melodic_emotion(audio_chunk).await;
+        
+        // Analyze harmony for emotional color
+        let harmonic_emotion = self.analyze_harmonic_emotion(audio_chunk).await;
+        
+        // Combine emotional indicators
+        emotional_resonance.valence = self.calculate_emotional_valence(&spectral_features, &melodic_analysis).await;
+        emotional_resonance.arousal = self.calculate_emotional_arousal(&spectral_features, &harmonic_emotion).await;
+        emotional_resonance.coherence = self.calculate_emotional_coherence(&melodic_analysis, &harmonic_emotion).await;
+        
+        emotional_resonance
+    }
+}
